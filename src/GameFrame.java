@@ -1,9 +1,10 @@
 import javax.swing.*;
+import java.io.IOException;
 
 
 public class GameFrame extends JFrame {
 
-    GameFrame() {
+    GameFrame() throws IOException {
 
         this.add(new GamePanel());
         this.setTitle("Wheel Game");
