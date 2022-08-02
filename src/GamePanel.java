@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
-public class GamePanel extends JPanel implements ActionListener {
+public class GamePanel extends JPanel implements Runnable {
 
     // ------------------- DATA FIELDS ------------------------------
 
@@ -18,6 +18,10 @@ public class GamePanel extends JPanel implements ActionListener {
     static final int UNIT_SIZE = 20;
     static final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE; // Sets up "Game Resolution"
     static final int DELAY = 20;
+    final int FPS = 60;  // Frames Per Second
+
+    KeyHandler keyH = new KeyHandler();
+    Thread gameThread;
 
     // Game resolution grid
     final int x[] = new int[GAME_UNITS];
@@ -28,16 +32,13 @@ public class GamePanel extends JPanel implements ActionListener {
     Image backGround = backGroundRaw.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_SMOOTH);
 
 
-    // Timer
-    Timer timer;
-    boolean running;
-
 
 
     // Controls
     public static char direction = 'S';
     public static char spin = 'N';
-    public static boolean spinOnce = true;
+//    public static boolean spinOnce = true;
+    int playerSpeed = 12;
 
 
 
@@ -54,8 +55,9 @@ public class GamePanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT));   // Sets size of game panel
         this.setBackground(Color.black);                                    // sets background color of game panel
         this.setFocusable(true);                                            // Makes it so game panel hears keyboard inputs
-        this.addKeyListener(new MyKeyAdapter());                            // sets up listener for game panel
-        startGame();
+        this.setDoubleBuffered(true);
+		this.addKeyListener(keyH);
+		                           // sets up listener for game panel
     }
 
 
@@ -63,93 +65,96 @@ public class GamePanel extends JPanel implements ActionListener {
     // ------------------- Game Panel Methods ----------------------------------
 
     // Initiates play mode -- Draws elements in starting position
-    public void startGame() {
-        new Wheel(); // Creates Wheel Object
-
-        // Game is running
-        running = true;
-        timer = new Timer(DELAY,this );
-        timer.start();
+    public void startGameThread() {
+        gameThread = new Thread(this);
+        new Wheel();
+        gameThread.start();
     }
 
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        draw(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g.drawImage(backGround, 0,0,null);
+        Wheel.draw(g2);
+
     }
 
     // Draw all objects onto Game Panel
     public void draw(Graphics g) {
-        g.drawImage(backGround, 0,0,null);
-        Wheel.draw(g);
+
     }
 
+
+//    @Override
+//    public void actionPerformed(ActionEvent e) {
+//        if(running) {
+//            Wheel.move();
+//        }
+//        repaint();
+//    }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        if(running) {
-            Wheel.move();
+    public void run() {
+
+        double drawInterval = 1000000000/FPS;
+        double nextDrawTime = System.nanoTime() + drawInterval;
+
+
+
+        while(gameThread != null) {
+
+            System.out.println("The game loop is running");
+
+            long currentTime = System.nanoTime();
+            System.out.println("Current Time: " + currentTime);
+//			long currentTime2 = System.currentTimemillis();
+
+
+            // 1 UDATE: update information such as character positions
+            update();
+
+            // 2 DRAW: draw the screen with the updated information
+            repaint();  // calls "paintComponent() method I guess"
+
+
+
+            try {
+                double remainingTime = nextDrawTime - System.nanoTime();
+                remainingTime = remainingTime/1000000;
+
+                if(remainingTime < 0) {
+                    remainingTime = 0;
+                }
+
+                Thread.sleep((long) remainingTime);
+
+                nextDrawTime += drawInterval;
+
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
-        repaint();
     }
 
+    //  ------------------- Controls -------------------------
 
-
-     //  ------------------- Controls -------------------------
-    public class MyKeyAdapter extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-            // -------- Move Left and Right Controls -----
-            if (e.getKeyCode() == KeyEvent.VK_RIGHT)  {
-                direction = 'R';
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                direction = 'L';
-            }
-
-            // --- Spin Clockwise and counterclockwise ---
-            if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-                spin = 'U';
-            }
-            else if ( e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-                spin = 'D';
-            }
-            else {
-                spin = 'N';
-            }
-
-
-
+    public void update() {
+        if		(keyH.upPressed 	== true && KeyHandler.spinOnce == true) {
+            KeyHandler.spinOnce = false;
+            Wheel.wheelAngle -= Wheel.theta;
         }
-        public void keyReleased(KeyEvent e) {
-
-            // When traveling right, only releasing the right arrow stops the wheel moving right.
-            if ((direction == 'R') && (e.getKeyCode() != 39)) {
-            }
-            // When traveling left, only releasing the left arrow stops the wheel moving left.
-            else if ((direction == 'L') && (e.getKeyCode() != 37)) {
-
-            }
-            else {
-                direction = 'S';
-            }
-
-
-
-            if (spin == 'U' || spin == 'D' ) {
-
-            }
-            else {
-                spin = 'N';
-                spinOnce = true;
-            }
-
-
-
-
+        else if (keyH.downPressed 	== true && KeyHandler.spinOnce == true) {
+            KeyHandler.spinOnce = false;
+            Wheel.wheelAngle += Wheel.theta;
         }
-
+        else if (keyH.rightPressed 	== true) {
+            Wheel.wheelPosition += playerSpeed;
+        }
+        else if (keyH.leftPressed 	== true) {
+            Wheel.wheelPosition -= playerSpeed;
+        }
 
     }
 
