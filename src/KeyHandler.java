@@ -12,7 +12,7 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-
+        // This method is required by "key Listener" but is unused
     }
 
     @Override

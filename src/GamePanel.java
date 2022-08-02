@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // ------------------- DATA FIELDS ------------------------------
 
-    // set up game window
+    // game window constants
     static final int SCREEN_WIDTH = 1000;
     static final int SCREEN_HEIGHT = 600;
     static final int UNIT_SIZE = 20;
@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     static final int DELAY = 20;
     final int FPS = 60;  // Frames Per Second
 
+    // initiate Key Handler so game panel can hear keyboard
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
@@ -34,10 +35,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
-    // Controls
-    public static char direction = 'S';
-    public static char spin = 'N';
-//    public static boolean spinOnce = true;
+
     int playerSpeed = 12;
 
 

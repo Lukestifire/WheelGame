@@ -13,7 +13,7 @@ public class GameFrame extends JFrame {
         this.setTitle("Wheel Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.pack();            // fits jframe snuggly around all components added
+        this.pack();            // fits jFrame snugly around all components added
 
         this.setLocationRelativeTo(null);
         this.setVisible(true);

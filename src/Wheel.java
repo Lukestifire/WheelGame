@@ -8,6 +8,8 @@ public class Wheel {
     static int wheelAngle;      // Keeps track of theta -- angle of the wheel on screen
     static int theta = 90;           // Angle in degrees each direction change spins the wheel
 
+    static int numOfSegments = 4;
+
     // Controls overall size of wheel
     static final int wheelSizeX = GamePanel.UNIT_SIZE * 7;
     static final int wheelSizeY = GamePanel.UNIT_SIZE * 7;
@@ -65,42 +67,4 @@ public class Wheel {
 
 
 
-    // --------------------- Controls ----------------------------------------
-//    public static void move() {
-//        switch(GamePanel.direction) {
-//            case 'S':
-//                break;
-//            case 'R':
-//                wheelPosition += GamePanel.UNIT_SIZE;
-//                break;
-//            case 'L':
-//                wheelPosition -= GamePanel.UNIT_SIZE;
-//                break;
-//        }
-//        switch(GamePanel.spin) {
-//            case 'N':
-//                break;
-//            case 'U':
-//                wheelAngle -= theta;
-//                break;
-//            case 'D':
-//                wheelAngle += theta;
-//                break;
-//        }
-
-//        if (GamePanel.spin == 'U' && GamePanel.spinOnce == true) {
-//            wheelAngle -= theta;
-//            GamePanel.spinOnce = false;
-//        }
-//        else if (GamePanel.spin == 'D' && GamePanel.spinOnce == true) {
-//            wheelAngle += theta;
-//            GamePanel.spinOnce = false;
-//        }
-//        else {
-//            GamePanel.spin = 'N';
-//        }
-
-//    }
-
-    /* TODO  -  add spin function. Should rotate one "slice" for each up/dwn press*/
 }
