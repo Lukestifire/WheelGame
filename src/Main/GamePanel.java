@@ -46,8 +46,8 @@ public class GamePanel extends JPanel implements Runnable {
     final int y[] = new int[GAME_UNITS];
 
     // Game Panel Background set and resized
-    BufferedImage backGroundRaw = ImageIO.read(new File("res/OutrunGif.gif"));
-    Image backGround = backGroundRaw.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_SMOOTH);
+//    BufferedImage backGroundRaw = ImageIO.read(new File("res/OutrunGif.gif"));
+//    Image backGround = backGroundRaw.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_SMOOTH);
 
     int playerSpeed = 12;
 
@@ -86,7 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        g2.drawImage(backGround, 0,0,null);
+//        g2.drawImage(backGround, 0,0,null);
         Assets.Wheel.draw(g2);
 
     }
