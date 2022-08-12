@@ -10,7 +10,7 @@ public class testItem1 extends Items {
     }
 
 
-    int itemID = 78;
+    int itemID = 10;
     int xSize = 10;
     int ySize = 10;
 

@@ -48,7 +48,7 @@ public class Wheel {
     // -------------------- ----Display ------------------------------------
     public static void draw(Graphics2D g2) {
 
-        if (Math.abs(wheelAngle) > 360) {
+        if (Math.abs(wheelAngle) == 360) {
             wheelAngle = 0;
         }
 
@@ -75,12 +75,14 @@ public class Wheel {
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 315,90);
 
-
+        g2.setColor(Color.orange);
+        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
+                wheelSizeX, wheelSizeY, wheelAngle + 45 ,90);
 
     }
 
 
-   public int whichSegmentUp() {
+   public static int whichSegmentUp() {
         if (Math.abs(wheelAngle) == 0) {
             segmentUp = 10;
         }

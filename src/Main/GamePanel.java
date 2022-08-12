@@ -161,6 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         testItem.update();
+        catchItem.checkCatch(testItem);
 
     }
 
