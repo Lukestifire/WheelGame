@@ -1,6 +1,8 @@
 package Main;
 
 import Assets.Wheel;
+import Assets.Items;
+import Assets.testItem1;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -49,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
 //    BufferedImage backGroundRaw = ImageIO.read(new File("res/OutrunGif.gif"));
 //    Image backGround = backGroundRaw.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_SMOOTH);
 
+    // Sets speed of player can move the wheel
     int playerSpeed = 12;
 
 
@@ -57,7 +60,8 @@ public class GamePanel extends JPanel implements Runnable {
 //    BufferedImage bg
 
 
-
+    ItemCatchDetector catchItem = new ItemCatchDetector();
+    Items testItem = new testItem1();
 
 
 // ---------------------- Game Panel Constructor ------------------------------
@@ -82,18 +86,19 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
 
-    // "paintComponent() is
+    // "paintComponent()
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 //        g2.drawImage(backGround, 0,0,null);
         Assets.Wheel.draw(g2);
+        testItem.draw(g2);
 
     }
 
 
 
-    // The Run function keeps track of time to update feedback and redraw the scree
+    // The Run function keeps track of time to update feedback and redraw the screen
     // 60 times per second
     @Override
     public void run() {
@@ -105,17 +110,19 @@ public class GamePanel extends JPanel implements Runnable {
 
         while(gameThread != null) {
 
-            System.out.println("The game loop is running");
+//            System.out.println("The game loop is running");
 
             long currentTime = System.nanoTime();
-            System.out.println("Current Time: " + currentTime);
+//            System.out.println("Current Time: " + currentTime);
+            System.out.println(Wheel.segmentUp);
+            System.out.println(Wheel.wheelAngle);
 
 
             // 1 UDATE: update information such as character positions
             update();
 
             // 2 DRAW: draw the screen with the updated information
-            repaint();  // calls "paintComponent() method I guess"
+            repaint();  // calls "paintComponent()" somehow
 
             try {
                 double remainingTime = nextDrawTime - System.nanoTime();
@@ -146,12 +153,14 @@ public class GamePanel extends JPanel implements Runnable {
             KeyHandler.spinOnce = false;
             Wheel.wheelAngle += Wheel.theta;
         }
-        else if (keyH.rightPressed 	== true) {
+        else if (keyH.rightPressed 	== true && Wheel.wheelPosition < (SCREEN_WIDTH - Wheel.wheelSizeX/1.5)) {
             Wheel.wheelPosition += playerSpeed;
         }
-        else if (keyH.leftPressed 	== true) {
+        else if (keyH.leftPressed 	== true && Wheel.wheelPosition > (-Wheel.wheelSizeX / 2)) {
             Wheel.wheelPosition -= playerSpeed;
         }
+
+        testItem.update();
 
     }
 
