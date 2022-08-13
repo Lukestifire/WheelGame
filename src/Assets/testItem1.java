@@ -1,3 +1,6 @@
+
+/*
+
 package Assets;
 
 import java.awt.*;
@@ -5,18 +8,18 @@ import java.awt.*;
 public class testItem1 extends Items {
 
 
-    public testItem1() {
-        setSpeed(2);
+    public testItem1(int speed, int ItemID) {
+        setSpeed(speed);
+        setItemID(itemID);
     }
-
-
-    int itemID = 10;
     int xSize = 10;
     int ySize = 10;
 
     public void draw(Graphics2D g2) {
-        g2.setColor(Color.red);
-        g2.fillArc(getXPosition(), getYPosition(), xSize, ySize,0,360 );
+
+            g2.setColor(Color.red);
+            g2.fillArc(x, y, xSize, ySize, 0, 360);
+
     }
 
     public void update() {
@@ -24,3 +27,4 @@ public class testItem1 extends Items {
     }
 
 }
+*/

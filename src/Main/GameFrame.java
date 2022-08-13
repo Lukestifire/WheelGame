@@ -20,7 +20,7 @@ public class GameFrame extends JFrame {
         // attributes of the frame.
         GamePanel gamePanel = new GamePanel();
         super.add(gamePanel);
-        this.setPreferredSize(new Dimension(1000,600));
+        this.setPreferredSize(new Dimension(1200,600));
         this.setTitle("Assets.Wheel Game");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);

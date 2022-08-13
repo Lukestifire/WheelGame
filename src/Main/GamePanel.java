@@ -2,7 +2,7 @@ package Main;
 
 import Assets.Wheel;
 import Assets.Items;
-import Assets.testItem1;
+//import Assets.testItem1;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,6 +11,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -31,17 +32,23 @@ public class GamePanel extends JPanel implements Runnable {
     // ------------------- DATA FIELDS ------------------------------
 
     // game window constants
-    public static final int SCREEN_WIDTH = 1000;
+    // Score board width
+    public static final int SCORE_BOARD_WIDTH = 200;
+    public static final int SCREEN_WIDTH = 1000 + SCORE_BOARD_WIDTH ;
     public static final int SCREEN_HEIGHT = 600;
     public static final int UNIT_SIZE = 20;
     public static final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE; // Sets up "Game Resolution"
+
     public final int FPS = 60;  // Frames Per Second
+
 
     // initiate Key Handler so game panel can hear keyboard
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
     Assets.Wheel wheel = new Wheel();
+    Assets.Items ball = new Items();
+    GameScore gameScore = new GameScore();
 
     // Game resolution grid
     final int x[] = new int[GAME_UNITS];
@@ -52,16 +59,16 @@ public class GamePanel extends JPanel implements Runnable {
 //    Image backGround = backGroundRaw.getScaledInstance(SCREEN_WIDTH, SCREEN_HEIGHT, Image.SCALE_SMOOTH);
 
     // Sets speed of player can move the wheel
-    int playerSpeed = 12;
+    int playerSpeed = 8;
 
 
 
 //    Icon bgRaw = new ImageIcon("res/OutrunGif.gif");
 //    BufferedImage bg
 
+//    Items testItem = new testItem1(1, 30);
+//    ItemCatchDetector catchItem = new ItemCatchDetector();
 
-    ItemCatchDetector catchItem = new ItemCatchDetector();
-    Items testItem = new testItem1();
 
 
 // ---------------------- Game Panel Constructor ------------------------------
@@ -84,6 +91,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+        if (GameScore.getEndGameState() == true) {
+            gameThread.interrupt();
+        }
     }
 
     // "paintComponent()
@@ -91,8 +101,10 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 //        g2.drawImage(backGround, 0,0,null);
-        Assets.Wheel.draw(g2);
-        testItem.draw(g2);
+        gameScore.draw(g2);
+        Wheel.draw(g2);
+//        testItem.draw(g2);
+        Assets.Items.paint(g2); //Thanh
 
     }
 
@@ -100,6 +112,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     // The Run function keeps track of time to update feedback and redraw the screen
     // 60 times per second
+
+    public static int timer = 0; // Thanh
     @Override
     public void run() {
 
@@ -107,16 +121,69 @@ public class GamePanel extends JPanel implements Runnable {
         double nextDrawTime = System.nanoTime() + drawInterval;
 
 
-
+        //Thanh
+        Random ran = new Random();
         while(gameThread != null) {
 
 //            System.out.println("The game loop is running");
 
             long currentTime = System.nanoTime();
 //            System.out.println("Current Time: " + currentTime);
-            System.out.println(Wheel.segmentUp);
-            System.out.println(Wheel.wheelAngle);
+            System.out.println(Wheel.whichSegmentUp());
+            System.out.println(SCREEN_WIDTH - Wheel.wheelSizeX/1.5 - SCORE_BOARD_WIDTH);
+            System.out.println((Wheel.wheelPosition));
+//THANH OPEN
 
+            timer += ran.nextInt(40);
+
+            //Balls Speed
+            Assets.Items.ballYBlue += Assets.Items.ballSpeedYBlue;
+            Assets.Items.ballYRed += Assets.Items.ballSpeedYRed;
+            Assets.Items.ballYGreen += Assets.Items.ballSpeedYGreen;
+            Assets.Items.ballYWhite += Assets.Items.ballSpeedYWhite;
+
+            //Square
+            if(Assets.Items.yes) {
+                Assets.Items.sqY +=  Assets.Items.sqSpeed;
+            }
+            if(Assets.Items.sqY > 600) {
+                timer = 0;
+                Assets.Items.yes = false;
+                Assets.Items.sqY = 0;
+                Assets.Items.sqX = ran.nextInt(800);
+            }
+
+            //Location
+            if(Assets.Items.ballYBlue > 600){ //Restart ball position to the top
+                Assets.Items.ballYBlue = -800;
+                Assets.Items.ballXBlue = ran.nextInt(100,900);
+            }
+            if(Assets.Items.ballYRed > 600) {
+                Assets.Items.ballYRed =-500;
+                Assets.Items.ballXRed = ran.nextInt(100,900);
+            }
+            if(Assets.Items.ballYGreen > 600 || Items.greenCaught == true) {
+                Assets.Items.ballYGreen= -900;
+                Assets.Items.ballXGreen = ran.nextInt(100,900);
+            }
+            if(Assets.Items.ballYWhite> 600) {
+                Assets.Items.ballYWhite = -500;
+                Assets.Items.ballXWhite = ran.nextInt(100,900);
+            }
+            //Not on top of each other
+            while((Assets.Items.ballXBlue == Assets.Items.ballXRed) || (Assets.Items.ballXGreen == Assets.Items.ballXWhite) || (Assets.Items.ballXBlue == Assets.Items.ballXGreen) ||
+                    (Assets.Items.ballXBlue == Assets.Items.ballXWhite)) {
+                Assets.Items.ballXRed = ran.nextInt(800);
+                Assets.Items.ballXBlue = ran.nextInt(800);
+                Assets.Items.ballXGreen = ran.nextInt(800);
+                Assets.Items.ballXWhite = ran.nextInt(800);
+            }
+            Items.greenCaught = false;
+            Items.blueCaught = false;
+            Items.redCaught = false;
+            Items.whiteCaught = false;
+
+            //CLOSE THANH
 
             // 1 UDATE: update information such as character positions
             update();
@@ -153,15 +220,16 @@ public class GamePanel extends JPanel implements Runnable {
             KeyHandler.spinOnce = false;
             Wheel.wheelAngle += Wheel.theta;
         }
-        else if (keyH.rightPressed 	== true && Wheel.wheelPosition < (SCREEN_WIDTH - Wheel.wheelSizeX/1.5)) {
+        else if (keyH.rightPressed 	== true && Wheel.wheelPosition < (SCREEN_WIDTH - SCORE_BOARD_WIDTH) ) {
             Wheel.wheelPosition += playerSpeed;
         }
         else if (keyH.leftPressed 	== true && Wheel.wheelPosition > (-Wheel.wheelSizeX / 2)) {
             Wheel.wheelPosition -= playerSpeed;
         }
 
-        testItem.update();
-        catchItem.checkCatch(testItem);
+        gameScore.update();
+//        testItem.update();
+//        catchItem.checkCatch(testItem);
 
     }
 

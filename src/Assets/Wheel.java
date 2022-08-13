@@ -13,7 +13,7 @@ public class Wheel {
     public static int theta = 90;           // Angle in degrees each direction change spins the wheel
 
     static int numOfSegments = 4;
-    public static int segmentUp = 10;
+    public static String segmentUp = "";
 
     // Controls overall size of wheel
     public static final int wheelSizeX = GamePanel.UNIT_SIZE * 7;
@@ -40,7 +40,7 @@ public class Wheel {
     // --------------------- Constructors ---------------------------------
     // places wheel in center of screen
     public Wheel() {
-        wheelPosition = (GamePanel.SCREEN_WIDTH/2)- (wheelSizeX/2);
+        wheelPosition = ((GamePanel.SCREEN_WIDTH - GamePanel.SCORE_BOARD_WIDTH) / 2) - (wheelSizeX/2);
     }
 
 
@@ -75,27 +75,33 @@ public class Wheel {
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 315,90);
 
-        g2.setColor(Color.orange);
-        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
-                wheelSizeX, wheelSizeY, wheelAngle + 45 ,90);
+//        g2.setStroke(new BasicStroke(3));
+//        g2.setColor(Color.orange);
+//        g2.drawRect(wheelPosition,GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),wheelSizeX,wheelSizeY);
+//        g2.drawArc(wheelPosition + (wheelSizeX/2), (GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3)) + (wheelSizeY/2),5,5,0,360);
 
     }
 
 
-   public static int whichSegmentUp() {
+   public static String whichSegmentUp() {
         if (Math.abs(wheelAngle) == 0) {
-            segmentUp = 10;
+            segmentUp = "GREEN";
+            return segmentUp;
         }
         else if (Math.abs(wheelAngle) == 90) {
-            segmentUp = 20;
+            segmentUp = "WHITE";
+            return segmentUp;
         }
         else if (Math.abs(wheelAngle) == 180) {
-            segmentUp = 30;
+            segmentUp = "RED";
+            return segmentUp;
         }
         else if (Math.abs(wheelAngle) == 270) {
-            segmentUp = 40;
+            segmentUp = "BLUE";
+            return segmentUp;
         }
-        return segmentUp;
+        else return "-1";
+
    }
 
 
