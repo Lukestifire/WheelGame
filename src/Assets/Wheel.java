@@ -11,38 +11,18 @@ public class Wheel {
     public static int wheelPosition;   // Keeps track of x position of wheel on screen
     public static int wheelAngle;      // Keeps track of theta -- angle of the wheel on screen
     public static int theta = 90;           // Angle in degrees each direction change spins the wheel
-
-    static int numOfSegments = 4;
-    public static String segmentUp = "";
+    public static String segmentUp = "";  // Which wheel segment is in the catch item position
 
     // Controls overall size of wheel
     public static final int wheelSizeX = GamePanel.UNIT_SIZE * 7;
     public static final int wheelSizeY = GamePanel.UNIT_SIZE * 7;
 
 
+    // --------------------- Constructor ---------------------------------
 
-
-
-    // --------------- Assets.Wheel Segment Characteristics ----------------------
-
-    // Segment 1: ID = 10 ---> Green
-
-
-    // Segment 2: ID = 20 ----> White
-
-
-    // Segment 3: ID = 30 ----> Red
-
-
-    // segment 4: ID = 40 ----> Blue
-
-
-    // --------------------- Constructors ---------------------------------
-    // places wheel in center of screen
     public Wheel() {
-        wheelPosition = ((GamePanel.SCREEN_WIDTH - GamePanel.SCORE_BOARD_WIDTH) / 2) - (wheelSizeX/2);
+        wheelPosition = (GamePanel.SCREEN_WIDTH/2) - (wheelSizeX/2); // Start in center of screen
     }
-
 
 
     // -------------------- ----Display ------------------------------------
@@ -52,33 +32,53 @@ public class Wheel {
             wheelAngle = 0;
         }
 
+        if (wheelPosition + (wheelSizeX/2) >= GamePanel.SCREEN_WIDTH)
+        {
+            wheelPosition = 0;
+        }
+
+        if (wheelPosition + (wheelSizeX/2) < 0 ) {
+            wheelPosition = GamePanel.SCREEN_WIDTH - (wheelSizeX/2);
+        }
+
         // Draws segment 1
+        g2.setStroke(new BasicStroke(4));
+        g2.setColor(Color.black);
+        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
+                wheelSizeX, wheelSizeY, wheelAngle + 45 ,90);
         g2.setColor(Color.green);
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 45 ,90);
 
 
         // Draws Segment 2
-        g2.setColor(Color.white);
+        g2.setStroke(new BasicStroke(4));
+        g2.setColor(Color.black);
+        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
+                wheelSizeX, wheelSizeY, wheelAngle + 135 ,90);
+        g2.setColor(Color.black);
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 135,90);
 
 
         // Draws Segment 3
+        g2.setStroke(new BasicStroke(4));
+        g2.setColor(Color.black);
+        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
+                wheelSizeX, wheelSizeY, wheelAngle + 225 ,90);
         g2.setColor(Color.red);
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 225,90);
 
 
         // Draws segment 4
+        g2.setStroke(new BasicStroke(4));
+        g2.setColor(Color.black);
+        g2.drawArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
+                wheelSizeX, wheelSizeY, wheelAngle + 315 ,90);
         g2.setColor(Color.blue);
         g2.fillArc(wheelPosition, GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),
                 wheelSizeX, wheelSizeY, wheelAngle + 315,90);
-
-//        g2.setStroke(new BasicStroke(3));
-//        g2.setColor(Color.orange);
-//        g2.drawRect(wheelPosition,GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3),wheelSizeX,wheelSizeY);
-//        g2.drawArc(wheelPosition + (wheelSizeX/2), (GamePanel.SCREEN_HEIGHT - (GamePanel.SCREEN_HEIGHT/3)) + (wheelSizeY/2),5,5,0,360);
 
     }
 
@@ -89,7 +89,7 @@ public class Wheel {
             return segmentUp;
         }
         else if (Math.abs(wheelAngle) == 90) {
-            segmentUp = "WHITE";
+            segmentUp = "BLACK";
             return segmentUp;
         }
         else if (Math.abs(wheelAngle) == 180) {

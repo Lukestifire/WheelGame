@@ -1,11 +1,7 @@
 package Assets;
 import Main.GamePanel;
-import Main.Main;
-
-import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
-import javax.swing.text.Position;
 
 import java.awt.*;
 import java.util.Random;
@@ -18,17 +14,17 @@ public class Items extends JPanel{
     public static float ballXRed; // Ball's center (x, y)
     public static float ballXGreen; // Ball's center (x, y)
     public static float ballXBlue; // Ball's center (x, y)
-    public static float ballXWhite; // Ball's center (x, y)
+    public static float ballXBlack; // Ball's center (x, y)
 
     public static float ballSpeedYRed;
     public static float ballSpeedYGreen;
     public static float ballSpeedYBlue;
-    public static float ballSpeedYWhite;
+    public static float ballSpeedYBlack;
 
     public static float ballYRed;
     public static float ballYGreen;
     public static float ballYBlue;
-    public static float ballYWhite;
+    public static float ballYBlack;
 
     public static float sqX;
     public static float sqY;
@@ -38,7 +34,11 @@ public class Items extends JPanel{
     public static boolean redCaught;
     public static boolean blueCaught;
     public static boolean greenCaught;
-    public static boolean whiteCaught;
+    public static boolean blackCaught;
+    public static boolean  sqCaught;
+
+    public static boolean ballMissed;
+
 
 
     //Speed Order from slow to fast: Blue -> Red -> Green -> White
@@ -49,29 +49,27 @@ public class Items extends JPanel{
 
         //Y location, start negative to give user some time to be prepared
         ballYRed = -400;
-        ballYBlue = -800;
-        ballYGreen = -1000;
-        ballYWhite =  -650;
+        ballYBlue = -200;
+        ballYGreen = -100;
+        ballYBlack =  -600;
 
         //Speed
-        ballSpeedYRed = 2;
-        ballSpeedYBlue = 1;
-        ballSpeedYGreen= 2.5f;
-        ballSpeedYWhite = 2.7f;
+        ballSpeedYRed = 1.2f;
+        ballSpeedYBlue = 1.2f;
+        ballSpeedYGreen= 1.3f;
+        ballSpeedYBlack = 1;
 
         //X location, random
         ballXRed =  ra.nextInt(100, 900);
         ballXBlue = ra.nextInt(100, 900);
         ballXGreen = ra.nextInt(100, 900);
-        ballXWhite = ra.nextInt(100, 900);
+        ballXBlack = ra.nextInt(100, 900);
 
         //square
         sqX = ra.nextInt(100, 900);
         sqY = -100;
         sqSpeed = 1;
         yes = false;
-
-
 
     }
     public static void paint(Graphics2D g) {
@@ -92,8 +90,8 @@ public class Items extends JPanel{
                 (int)(2 * ballRadius), (int)(2 * ballRadius));
 
         //White ball
-        g.setColor(Color.WHITE);
-        g.fillOval((int)ballXWhite, (int) ballYWhite,
+        g.setColor(Color.black);
+        g.fillOval((int) ballXBlack, (int) ballYBlack,
                 (int)(2 * ballRadius), (int)(2 * ballRadius));
 
         //Bomb aka square for now, if user touch this, then minus two points.
@@ -107,95 +105,3 @@ public class Items extends JPanel{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-package Assets;
-
-import Main.GamePanel;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-
-public class Items {
-    protected int itemID;
-    protected boolean isCaught = false;
-    protected int x = ((GamePanel.SCREEN_WIDTH - GamePanel.SCORE_BOARD_WIDTH * 2) /2);
-    protected int y = 200;
-    private int speed;
-    private int angle;
-
-    public BufferedImage item;
-
-    public int getXPosition() {
-        return x;
-    }
-    public int getYPosition() {
-        return y;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-
-    //--------------setter methods ----------
-    public void setXposition(int x) {
-        this.x = x;
-    }
-
-    public void setYposition(int y) {
-        this.y = y;
-    }
-    public void setItemID(int itemID) {
-        this.itemID = itemID;
-    }
-    public void setIsCaught(boolean isCaught) {
-        this.isCaught = isCaught;
-    }
-
-    // ------------ getter methods ---------
-    public int getXposition() {
-        return this.x;
-    }
-    public int getYposition() {
-        return this.y;
-    }
-
-    public int getItemID() {
-        return itemID;
-    }
-    public boolean getIsCaught() {
-        return isCaught;
-    }
-
-
-    public void update() {
-        y += y + getSpeed();
-    }
-
-
-
-    public void draw(Graphics2D g2) {
-    }
-}
-*/
