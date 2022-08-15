@@ -16,7 +16,7 @@ import java.util.Random;
 import javax.sound.sampled.*;
 import javax.swing.*;
 
-
+// -------------------------- Game Panel ------------------------
 /*
     This is the GamePanel CLass. It is the central hub that all the components talk to.
         -It sets up the "JPanel" i.e. the Java swing component that all the graphics are
@@ -43,14 +43,14 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
 
     public boolean gameOver = false;
 
-    // initiate Key Handler so game panel can hear keyboard
-    KeyHandler keyH = new KeyHandler();
+
+    KeyHandler keyH = new KeyHandler(); // Initiate Key Handler so game panel can listen to keyboard
     Thread gameThread;
     Assets.Wheel wheel = new Wheel();
     Assets.Items ball = new Items();
     GameScore gameScore = new GameScore();
 
-    // Game resolution grid
+    // Game resolution grid is kept track of with two arrays
     final int x[] = new int[GAME_UNITS];
     final int y[] = new int[GAME_UNITS];
 
@@ -81,13 +81,14 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
         gameThread.start();
     }
 
+    // When called, stop thread and display "GAMEOVER" screen
     public void stopGameThread() throws InterruptedException {
         repaint();
         gameThread.sleep(5000000);
     }
 
 
-    // paintComponent()
+    // paintComponent() uses graphics to draw to the game panel
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -100,7 +101,6 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
 
     // The Run function keeps track of time to update feedback and redraw the screen
     // 60 times per second
-
     public static int timer = 0; // Thanh
     @Override
     public void run() {
@@ -109,18 +109,16 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
         double nextDrawTime = System.nanoTime() + drawInterval;
 
 
-        //Thanh
-        Random ran = new Random();
+
+        Random ran = new Random(); //Thanh
+
         while(gameThread != null) {
-
-//            System.out.println("The game loop is running");
-
             long currentTime = System.nanoTime();
             System.out.println(Wheel.whichSegmentUp());
             System.out.println(GameScore.getEndGameState());
+            System.out.println(Wheel.wheelAngle);
 
             //THANH OPEN
-
             timer += ran.nextInt(40);
 
             //Balls Speed
@@ -140,7 +138,7 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
                 Assets.Items.sqX = ran.nextInt(800);
             }
 
-            //Location of items
+            //Location of falling items
             if(Assets.Items.ballYBlue > 600 || Items.blueCaught == true){ //Restart ball position to the top
                 Assets.Items.ballYBlue = -800;
                 Assets.Items.ballXBlue = ran.nextInt(100,900);
@@ -157,7 +155,7 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
                 Assets.Items.ballYBlack = -1200;
                 Assets.Items.ballXBlack = ran.nextInt(100,900);
             }
-            //Not on top of each other
+            //Items Not on top of each other
             while((Assets.Items.ballXBlue == Assets.Items.ballXRed) || (Assets.Items.ballXGreen == Assets.Items.ballXBlack) || (Assets.Items.ballXBlue == Assets.Items.ballXGreen) ||
                     (Assets.Items.ballXBlue == Assets.Items.ballXBlack)) {
                 Assets.Items.ballXRed = ran.nextInt(800);
@@ -177,13 +175,14 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
                     throw new RuntimeException(e);
                 }
             }
+            // item caught flags reset for "GameScore Class"
             Items.greenCaught = false;
             Items.blueCaught = false;
             Items.redCaught = false;
             Items.blackCaught = false;
             Items.ballMissed = false;
 
-            // If lives are at or below 0 stop the ame
+            // If lives are at or below 0 stop the game -- display "GAMEOVER"
             if (GameScore.getEndGameState() == true) {
                 try {
                     stopGameThread();
@@ -238,7 +237,7 @@ public class GamePanel extends JPanel implements Runnable, ActionListener {
     }
 
 
-
+    // Ding sound for user feedback when an item is successfully caught.
     public static void playSound(String soundFile) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
         File f = new File("./" + soundFile);
         AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());

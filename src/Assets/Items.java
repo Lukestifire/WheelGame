@@ -6,6 +6,14 @@ import javax.swing.JPanel;
 import java.awt.*;
 import java.util.Random;
 
+// -------------------------------- Items ------------------------------------------
+  /*
+    The Items class creates and organizes the position of all the falling objects, their color,
+    and their speed. The GameScore class communicates when an item is caught and this
+    class resets the position in another random location.
+
+ */
+
 public class Items extends JPanel{
     public static float ballRadius; // Ball's radius
     public final int UPDATE_RATE = 30;
@@ -53,7 +61,7 @@ public class Items extends JPanel{
         ballYGreen = -100;
         ballYBlack =  -600;
 
-        //Speed
+        //Speed objects fall
         ballSpeedYRed = 1.2f;
         ballSpeedYBlue = 1.2f;
         ballSpeedYGreen= 1.3f;
@@ -72,6 +80,8 @@ public class Items extends JPanel{
         yes = false;
 
     }
+
+    // The paint function uses the graphics class to draw the balls in their updated position
     public static void paint(Graphics2D g) {
 
         //Blue ball

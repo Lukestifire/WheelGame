@@ -4,10 +4,20 @@ import Main.GamePanel;
 
 import java.awt.*;
 
-//------------------------------- WHEEL! -----------------------------------
+//------------------------------- WHEEL -----------------------------------
+/*
+    The Wheel class handles the control and image of the wheel.
+    -It keeps track of the x position
+    -It draws all four segments, sets their color and records their position
+    -It initially sets the wheel with the green segment in the up position and
+    the center of the wheel in the center of the screen
+
+*/
+
+
 
 public class Wheel {
-    // ---------------- Assets.Wheel Characteristics -----------------------------
+    // ---------------- Wheel Characteristics -----------------------------
     public static int wheelPosition;   // Keeps track of x position of wheel on screen
     public static int wheelAngle;      // Keeps track of theta -- angle of the wheel on screen
     public static int theta = 90;           // Angle in degrees each direction change spins the wheel
@@ -18,14 +28,20 @@ public class Wheel {
     public static final int wheelSizeY = GamePanel.UNIT_SIZE * 7;
 
 
+
+
     // --------------------- Constructor ---------------------------------
+    // Places the wheel in the center of the screen at the beginning of the game
 
     public Wheel() {
         wheelPosition = (GamePanel.SCREEN_WIDTH/2) - (wheelSizeX/2); // Start in center of screen
     }
 
 
-    // -------------------- ----Display ------------------------------------
+
+
+    // ------------------------Display ------------------------------------
+    // Draws the wheel and its components
     public static void draw(Graphics2D g2) {
 
         if (Math.abs(wheelAngle) == 360) {
@@ -37,7 +53,7 @@ public class Wheel {
             wheelPosition = 0;
         }
 
-        if (wheelPosition + (wheelSizeX/2) < 0 ) {
+        else if (wheelPosition + (wheelSizeX/2) < 0 ) {
             wheelPosition = GamePanel.SCREEN_WIDTH - (wheelSizeX/2);
         }
 
@@ -82,13 +98,13 @@ public class Wheel {
 
     }
 
-
+    // Returns a string referring to the segment currently in the "catch" position
    public static String whichSegmentUp() {
         if (Math.abs(wheelAngle) == 0) {
             segmentUp = "GREEN";
             return segmentUp;
         }
-        else if (Math.abs(wheelAngle) == 90) {
+        else if ((wheelAngle) == -90 || wheelAngle == 270) {
             segmentUp = "BLACK";
             return segmentUp;
         }
@@ -96,7 +112,7 @@ public class Wheel {
             segmentUp = "RED";
             return segmentUp;
         }
-        else if (Math.abs(wheelAngle) == 270) {
+        else if (wheelAngle == -270 || wheelAngle ==  90 ) {
             segmentUp = "BLUE";
             return segmentUp;
         }

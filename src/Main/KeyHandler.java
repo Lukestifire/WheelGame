@@ -3,6 +3,14 @@ package Main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+// ---------------------------------- Key Handler ----------------------------------
+/*
+    This class implements the KeyListener interface so that, when the GamePanel class
+    is set to "focusable", the keyboard input codes can be used to update the position of the wheel.
+    -Left and right will tell the wheel to move left and right.
+    -'Up' and 'W' will spin the wheel clockwise and 'down' and 'S' will spin the wheel counterclockwise.
+ */
+
 public class KeyHandler implements KeyListener {
 
     public boolean upPressed, downPressed, leftPressed, rightPressed;
@@ -11,8 +19,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        // This method is required by "key Listener" but is unused
+        // This method is required by "key Listener" but is unused in this program
     }
 
     @Override
